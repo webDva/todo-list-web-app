@@ -1,0 +1,16 @@
+{
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "start debug": "node --inspect --debug-brk server.js",
+        "start debug no break": "node --inspect server.js"
+    },
+    "dependencies": {
+        "bcrypt": "^2.0.1",
+        "body-parser": "^1.18.3",
+        "express": "^4.16.3",
+        "mongodb": "^3.0.10",
+        "path": "^0.12.7",
+        "uuidv4": "^1.0.1"
+    }
+}
