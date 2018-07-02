@@ -86,6 +86,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/frontend/index.html'));
 });
 
+// register page
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, '/frontend/register.html'));
+});
+
 // Start the HTTP server.
 app.listen(PORT, (err) => {
     if (err) {
