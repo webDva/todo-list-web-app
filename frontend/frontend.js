@@ -43,23 +43,3 @@ function login() {
         }
     };
 }
-
-function who() {
-    let xhr = new XMLHttpRequest();
-
-    xhr.open("GET", "/who", true);
-    xhr.send();
-
-    xhr.onload = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            const response = JSON.parse(this.responseText);
-            if (response) {
-                document.getElementById('who').innerHTML += response.email;
-                document.getElementById('id').innerHTML += response.account_id;
-                document.getElementById('pass').innerHTML += response.password;
-            } else {
-                console.log(this.response);
-            }
-        }
-    };
-}

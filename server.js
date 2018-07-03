@@ -37,7 +37,7 @@ app.use(session({
     secret: 'single quoates',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 600000 },
+    cookie: { maxAge: 100000 },
     store: new MongoStore({ url: databaseuri })
 }));
 
@@ -87,17 +87,20 @@ app.route('/signup')
                     // if an entry already exists, send an error to the client
                     if (result) {
                         db.close();
-                        return res.send({ error: true });
+                        return res.send({ error: 'already exists' });
                     } else {
                         dbo.collection('accounts').insertOne({
                             account_id: uuidv4(),
                             email: req.body.email,
                             password: bcrypt.hashSync(req.body.password, 12),
                             type: "account"
-                        }, (err, res) => { if (err) throw err; });
+                        }, (err, result) => {
+                            if (err) throw err;
+
+                            req.session.user = result.account_id;
+                        });
 
                         db.close();
-                        req.session.user = req.body.email;
                         return res.send({ success: true });
                     }
                 })
@@ -123,7 +126,7 @@ app.route('/login')
                     } else if (!bcrypt.compareSync(req.body.password, result.password)) {
                         return res.send({ error: true });
                     } else {
-                        req.session.user = req.body.email;
+                        req.session.user = result.account_id;
                         return res.send({ success: true });
                     }
                 });
@@ -136,25 +139,6 @@ app.get('/dashboard', (req, res) => {
     } else {
         return res.redirect('/');
     }
-});
-
-app.get('/who', (req, res) => {
-    MongoClient.connect(databaseuri + databasename, (err, db) => {
-        if (err) throw err;
-
-        const dbo = db.db(databasename);
-
-        dbo.collection('accounts').findOne({ email: req.session.user })
-            .then(result => {
-                if (err) throw err;
-
-                if (!result) {
-                    return res.send({ error: true });
-                } else {
-                    return res.send(result);
-                }
-            });
-    });
 });
 
 /*
