@@ -1,7 +1,14 @@
+// "C:\Program Files\MongoDB\Server\3.6\bin\mongod.exe"
+// "C:\Program Files\MongoDB\Server\3.6\bin\mongo.exe"
+
 // common backend
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+
+// session middleware
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session); // session store
 
 // database
 const MongoClient = require('mongodb').MongoClient;
@@ -26,6 +33,14 @@ const app = express();
 app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(session({
+    secret: 'single quoates',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 },
+    store: new MongoStore({ url: databaseuri })
+}));
+
 const PORT = process.env.PORT || '3000';
 app.set('port', PORT);
 
@@ -33,33 +48,108 @@ app.set('port', PORT);
 * Routes
 */
 
-app.post('/createAccount', (req, res) => {
+// check if user's cookie is still saved in browser and user is not set, then automatically log the user out
+app.use((req, res, next) => {
+    if (req.session.cookie.user_sid && !req.session.user) {
+        res.clearCookie('user_sid');
+    }
+    next();
+});
+
+// middleware function to check for logged-in users
+const sessionChecker = (req, res, next) => {
+    if (req.session.cookie.user_sid && req.session.user) {
+        res.redirect('/dashboard');
+    } else {
+        next();
+    }
+};
+
+app.route('/signup')
+    .get(sessionChecker, (req, res) => {
+        res.sendFile(path.join(__dirname, '/frontend/signup.html'));
+    })
+    .post((req, res) => {
+        MongoClient.connect(databaseuri + databasename, (err, db) => {
+            if (err) throw err;
+
+            const dbo = db.db(databasename);
+
+            dbo.collection('accounts').findOne({ email: req.body.email })
+                .then(result => {
+                    if (err) throw err;
+
+                    // if an entry already exists, send an error to the client
+                    if (result) {
+                        db.close();
+                        //return res.redirect('/');
+                        return res.send({ error: true });
+                    } else {
+                        dbo.collection('accounts').insertOne({
+                            account_id: uuidv4(),
+                            email: req.body.email,
+                            password: bcrypt.hashSync(req.body.password, 12),
+                            type: "account"
+                        }, (err, res) => { if (err) throw err; });
+
+                        db.close();
+                        req.session.user = req.body.email;
+                        //return res.redirect('/dashboard');
+                        return res.send({ success: true });
+                    }
+                })
+                .catch(error => {
+                    return res.send({ error: true });
+                });
+        });
+    });
+
+app.route('/login')
+    .post((req, res) => {
+        MongoClient.connect(databaseuri + databasename, (err, db) => {
+            if (err) throw err;
+
+            const dbo = db.db(databasename);
+
+            dbo.collection('accounts').findOne({ email: req.body.email })
+                .then(result => {
+                    if (err) throw err;
+
+                    if (!result) {
+                        return res.send({ error: true });
+                    } else if (!bcrypt.compareSync(req.body.password, result.password)) {
+                        return res.send({ error: true });
+                    } else {
+                        req.session.user = req.body.email;
+                        return res.send({ success: true });
+                    }
+                });
+        });
+    });
+
+app.get('/dashboard', (req, res) => {
+    if (req.session.user) {
+        return res.sendFile(__dirname + '/frontend/dashboard.html');
+    } else {
+        return res.redirect('/');
+    }
+});
+
+app.get('/who', (req, res) => {
     MongoClient.connect(databaseuri + databasename, (err, db) => {
         if (err) throw err;
 
         const dbo = db.db(databasename);
 
-        dbo.collection('accounts').findOne({ email: req.body.email })
+        dbo.collection('accounts').findOne({ email: req.session.user })
             .then(result => {
                 if (err) throw err;
 
-                // if an entry already exists, send an error to the client
-                if (result) {
-                    db.close();
+                if (!result) {
                     return res.send({ error: true });
                 } else {
-                    dbo.collection('accounts').insertOne({
-                        account_id: uuidv4(),
-                        email: req.body.email,
-                        password: bcrypt.hashSync(req.body.password, 12),
-                        type: "account"
-                    }, (err, res) => { if (err) throw err; });
-
-                    db.close();
-                    return res.send({ success: true });
+                    return res.send(result);
                 }
-            }, error => {
-                return res.send({ error: true });
             });
     });
 });
@@ -84,11 +174,6 @@ app.use(express.static(path.join(__dirname, '/frontend')));
 // Catch all other routes and return the index file
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/frontend/index.html'));
-});
-
-// register page
-app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '/frontend/register.html'));
 });
 
 // Start the HTTP server.
