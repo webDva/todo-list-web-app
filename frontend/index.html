@@ -7,14 +7,16 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div>
         <a href="/signup">Sign-up</a>
     </div>
-    <div id="login">
-        <h1>Login</h1>
+    <div id="login" class="login flexbox-container">
+        <h1 class="login-head">Login</h1>
         <div>
             <label for="email">Email</label>
             <br>
@@ -26,7 +28,7 @@
             <br>
             <input required type="password" id="password">
         </div>
-        <button type="submit" onclick="login()">Submit</button>        
+        <button type="submit" onclick="login()">Login</button>        
     </div>
     <script src="frontend.js"></script>
 </body>
