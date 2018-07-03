@@ -2,6 +2,12 @@ function signUp() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
+    if (document.getElementById('password').value != document.getElementById('confirm_password').value) {
+        document.getElementById('password-label').innerHTML = 'Enter a password ❌';
+        document.getElementById('confirm_password-label').innerHTML = 'Confirm the password ❌';
+        return;
+    }
+
     let xhr = new XMLHttpRequest();
 
     xhr.open("POST", "/signup", true);
