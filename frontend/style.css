@@ -13,15 +13,15 @@ html, body {
     align-items: center;  
 }
 
-.login {
+.login .signup {
     margin: 0 auto;
 }
 
-.login-head {
+.login-head, .signup-head {
     padding: 1.4rem 2rem;
     text-align: center;
     margin-top: 2rem;
-    font-family: Verdana;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     position: relative;
     display: inline-block;
@@ -30,11 +30,22 @@ html, body {
     font-size: 1.6em;
 }
 
+a {
+    color: #F64C72;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #c43c5b;
+}
+
 label {
     position: relative;
     display: inline-block;
     margin: 8px;
     font-size: 20px;
+    color: #9e8797;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 input {
@@ -50,7 +61,7 @@ button {
     display: block;
     clear: both;
     margin-top: 20px;
-    border: 4px solid deeppink;
+    border: 4px solid #F64C72;
     border-radius: 4px;
     font-size: 20px;
     font-weight: bold;
@@ -63,11 +74,11 @@ button {
 }
 
 button:hover {
-    background-color: deeppink;
+    background-color: #F64C72;
 }
   
 button:active {
-    background-color: crimson;
-    border-color: crimson;
+    background-color: #c43c5b;
+    border-color: #c43c5b;
     transition-duration: 0s;
 }
