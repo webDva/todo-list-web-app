@@ -50,15 +50,15 @@ app.set('port', PORT);
 
 // check if user's cookie is still saved in browser and user is not set, then automatically log the user out
 app.use((req, res, next) => {
-    if (req.session.cookie.user_sid && !req.session.user) {
-        res.clearCookie('user_sid');
+    if (req.session.cookie && !req.session.user) {
+        res.clearCookie('connect.sid');
     }
     next();
 });
 
 // middleware function to check for logged-in users
 const sessionChecker = (req, res, next) => {
-    if (req.session.cookie.user_sid && req.session.user) {
+    if (req.session.cookie && req.session.user) {
         res.redirect('/dashboard');
     } else {
         next();
@@ -82,7 +82,6 @@ app.route('/signup')
                     // if an entry already exists, send an error to the client
                     if (result) {
                         db.close();
-                        //return res.redirect('/');
                         return res.send({ error: true });
                     } else {
                         dbo.collection('accounts').insertOne({
@@ -94,7 +93,6 @@ app.route('/signup')
 
                         db.close();
                         req.session.user = req.body.email;
-                        //return res.redirect('/dashboard');
                         return res.send({ success: true });
                     }
                 })
