@@ -37,7 +37,7 @@ app.use(session({
     secret: 'single quoates',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 600000 },
     store: new MongoStore({ url: databaseuri })
 }));
 
@@ -58,12 +58,17 @@ app.use((req, res, next) => {
 
 // middleware function to check for logged-in users
 const sessionChecker = (req, res, next) => {
-    if (req.session.cookie && req.session.user) {
+    if (req.session.user && req.session.cookie) {
         res.redirect('/dashboard');
     } else {
         next();
     }
 };
+
+app.route('/')
+    .get(sessionChecker, (req, res) => {
+        res.sendFile(path.join(__dirname, '/frontend/index.html'));
+    });
 
 app.route('/signup')
     .get(sessionChecker, (req, res) => {
@@ -168,11 +173,6 @@ app.use(function (err, req, res, next) {
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, '/frontend')));
-
-// Catch all other routes and return the index file
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/frontend/index.html'));
-});
 
 // Start the HTTP server.
 app.listen(PORT, (err) => {
