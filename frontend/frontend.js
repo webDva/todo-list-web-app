@@ -62,22 +62,17 @@ function createNewTodoElement(todoText) {
     let listItem = document.createElement("li");
     listItem.className = "todo-listitem";
     
-    let checkBox = document.createElement("input");
-    let label = document.createElement("label");
     let deleteButton = document.createElement("button");
-  
-    checkBox.type = "checkBox";
-    checkBox.className = "input-checkbox-type-1";
+    let label = document.createElement("label");
+
+    deleteButton.innerText = "Cross off";
+    deleteButton.className = "delete-button";
 
     label.innerText = todoText;
     label.className = "todo-label-text";
 
-    deleteButton.innerText = "Remove";
-    deleteButton.className = "delete-button";
-
-    listItem.appendChild(checkBox);
-    listItem.appendChild(label);
     listItem.appendChild(deleteButton);
+    listItem.appendChild(label);
 
     return listItem;
 }
@@ -85,36 +80,18 @@ function createNewTodoElement(todoText) {
 function addTodo() {
     let listItem = createNewTodoElement(todoInput.value);
     listOfTodos.appendChild(listItem);
-    bindTodoEvents(listItem, todoCompleted);
+    let deleteButton = listItem.querySelector('button.delete-button');
+    deleteButton.onclick = completeTodo;
     todoInput.value = '';
 }
 
-function deleteTodo() {
-    let listItem = this.parentNode;
-    let ul = listItem.parentNode;
-    ul.removeChild(listItem);
-}
-
-function todoCompleted() {
+function completeTodo() {
     let listItem = this.parentNode;
     listItem.querySelector('label').style.textDecoration = 'line-through';
-    bindTodoEvents(listItem, todoIncomplete);
-}
-
-function todoIncomplete() {
-    let listItem = this.parentNode;
-    listItem.querySelector('label').style.textDecoration = 'none';
-    bindTodoEvents(listItem, todoCompleted);
+    listItem.querySelector('button.delete-button').innerText = '✔️';
 }
 
 addButton.addEventListener('click', addTodo);
-
-function bindTodoEvents(todoListItem, checkBoxEventHandler) {
-    let checkBox = todoListItem.querySelector('input[type="checkbox"]');
-    let deleteButton = todoListItem.querySelector('button.delete-button');
-    checkBox.onchange = checkBoxEventHandler;
-    deleteButton.onclick = deleteTodo;
-}
 
 function enterKey(event) {
     if (event.keyCode == 13) {
@@ -123,5 +100,39 @@ function enterKey(event) {
     } 
     else {
         return true;
+    }
+}
+
+/*
+* Local storage
+*/
+
+if (storageAvailable('localStorage')) {
+    // localStorage is available
+  }
+  else {
+    // localStorage is not available
+  }
+
+  function storageAvailable(type) {
+    try {
+        let storage = window[type],
+            x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    } catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            storage.length !== 0;
     }
 }

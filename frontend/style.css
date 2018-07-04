@@ -176,17 +176,9 @@ a:hover {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.input-checkbox-type-1 {
-    margin: 0 10px;
-    position: relative;
-    top: 15px;
-    float: left;
-    outline: none;
-}
-
 .todo-label-text {
     font-size: 26px;
-    width: 65%;
+    width: 60%;
     padding: 0 5px 0 10px;
     float: left;
 }
@@ -197,7 +189,9 @@ a:hover {
     color: fuchsia;
     font-size: 18px;
     outline: none;
-    width: 60px;
+    width: 100px;
+    margin: 0 5px;
+    float: left;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     cursor: pointer;
 }
