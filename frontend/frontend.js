@@ -20,8 +20,6 @@ function signUp() {
             const response = JSON.parse(this.responseText);
             if (response.success === true) {
                 window.location.replace('/');
-            } else {
-                console.log(this.response);
             }
         }
     };
@@ -43,8 +41,6 @@ function login() {
             const response = JSON.parse(this.responseText);
             if (response.success) {
                 window.location.replace("/dashboard");
-            } else {
-                console.log(this.response);
             }
         }
     };
@@ -99,7 +95,9 @@ function completeTodo() {
     localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 }
 
-addButton.addEventListener('click', addTodo);
+// check for the right page
+if (addButton)
+    addButton.addEventListener('click', addTodo);
 
 function enterKey(event) {
     if (event.keyCode == 13) {
@@ -126,12 +124,15 @@ if (localStorage.getItem('todos')) {
 localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 const dataFromLocalStorage = JSON.parse(localStorage.getItem('todos'));
 
-dataFromLocalStorage.forEach(todo => {
-    let listItem = createNewTodoElement(todo);
-    listOfTodos.appendChild(listItem);
-    let deleteButton = listItem.querySelector('button.delete-button');
-    deleteButton.onclick = completeTodo;
-});
+// check for the right page
+if (addButton) {
+    dataFromLocalStorage.forEach(todo => {
+        let listItem = createNewTodoElement(todo);
+        listOfTodos.appendChild(listItem);
+        let deleteButton = listItem.querySelector('button.delete-button');
+        deleteButton.onclick = completeTodo;
+    });
+}
 
 if (storageAvailable('localStorage')) {
     // localStorage is available

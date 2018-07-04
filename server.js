@@ -87,7 +87,7 @@ app.route('/signup')
                     // if an entry already exists, send an error to the client
                     if (result) {
                         db.close();
-                        return res.send({ error: 'already exists' });
+                        return res.send({ error: true });
                     } else {
                         dbo.collection('accounts').insertOne({
                             account_id: uuidv4(),
