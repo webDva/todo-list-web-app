@@ -13,11 +13,24 @@ html, body {
     align-items: center;  
 }
 
+a {
+    color: #F64C72;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #c43c5b;
+}
+
+/*
+* login and sign-up segments
+*/
+
 .login .signup {
     margin: 0 auto;
 }
 
-.login-head, .signup-head {
+.header-type-1 {
     padding: 1.4rem 2rem;
     text-align: center;
     margin-top: 2rem;
@@ -30,25 +43,16 @@ html, body {
     font-size: 1.6em;
 }
 
-a {
-    color: #F64C72;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #c43c5b;
-}
-
-label {
+.label-type-1 {
     position: relative;
     display: inline-block;
-    margin: 8px;
+    margin: 8px 8px 8px 0;
     font-size: 20px;
-    color: #9e8797;
+    color: white;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-input {
+.input-type-1 {
     margin: 6px auto;
     margin-bottom: 1em;
     width: 280px;
@@ -56,7 +60,7 @@ input {
     border: solid transparent;
 }
 
-button {
+.button-type-1 {
     position: relative;
     display: block;
     clear: both;
@@ -73,12 +77,127 @@ button {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-button:hover {
+.button-type-1:hover {
     background-color: #F64C72;
 }
   
-button:active {
+.button-type-1:active {
     background-color: #c43c5b;
     border-color: #c43c5b;
     transition-duration: 0s;
+}
+
+/*
+*  Todo list functionality
+*/
+
+.header-type-2 {
+    padding: 0.8rem;
+    text-align: center;
+    margin: 2rem 0;
+    font-family: Geneva, Verdana, 'Segoe UI', Tahoma, sans-serif;
+
+    position: relative;
+    display: inline-block;
+
+    font-size: 2.6em;    
+}
+
+.main-value-proposition {
+    width: 500px;
+    max-width: 90%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+    min-height: 400px;
+}
+
+.small-header {
+    border-bottom: 2px solid white;
+    padding-bottom: 10px;
+    font-size: 2em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 50px 0 0;
+}
+
+/*
+* add-container class
+*/
+
+.addnew-label {
+    display: block;
+    color: fuchsia;
+    font-weight: 700;
+    font-size: 20px;
+    padding: 30px 0 10px;
+    margin: 0 0 5px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.input-type-2 {
+    width: 80%;
+    margin: 0;
+    font-size: 22px;
+    outline: none;
+    line-height: 22px;
+    height: 22px;
+    padding: 10px;
+    border: 1px solid #9e8797;
+    border-radius: 6px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.button-type-2 {
+    width: 10%;
+    background: none;
+    border: none;
+    color: fuchsia;
+    outline: none;
+    font-size: 20px;
+    font-weight: 300;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    cursor: pointer;
+}
+
+/*
+* Todo list classes
+*/
+
+#list-of-todos {
+    margin: 0;
+    padding: 0;
+}
+
+.todo-listitem {
+    padding: 20px 0;
+    border-bottom: 1px solid white;
+    overflow: hidden;
+    clear: both;
+    list-style: none;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.input-checkbox-type-1 {
+    margin: 0 10px;
+    position: relative;
+    top: 15px;
+    float: left;
+    outline: none;
+}
+
+.todo-label-text {
+    font-size: 26px;
+    width: 65%;
+    padding: 0 5px 0 10px;
+    float: left;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    color: fuchsia;
+    font-size: 18px;
+    outline: none;
+    width: 60px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    cursor: pointer;
 }

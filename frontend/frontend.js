@@ -49,3 +49,79 @@ function login() {
         }
     };
 }
+
+/*
+* For todo list functionality
+*/
+
+const todoInput = document.getElementById("new-todo");
+const addButton = document.getElementById("add-todo-button");
+const listOfTodos = document.getElementById("list-of-todos");
+
+function createNewTodoElement(todoText) {
+    let listItem = document.createElement("li");
+    listItem.className = "todo-listitem";
+    
+    let checkBox = document.createElement("input");
+    let label = document.createElement("label");
+    let deleteButton = document.createElement("button");
+  
+    checkBox.type = "checkBox";
+    checkBox.className = "input-checkbox-type-1";
+
+    label.innerText = todoText;
+    label.className = "todo-label-text";
+
+    deleteButton.innerText = "Remove";
+    deleteButton.className = "delete-button";
+
+    listItem.appendChild(checkBox);
+    listItem.appendChild(label);
+    listItem.appendChild(deleteButton);
+
+    return listItem;
+}
+
+function addTodo() {
+    let listItem = createNewTodoElement(todoInput.value);
+    listOfTodos.appendChild(listItem);
+    bindTodoEvents(listItem, todoCompleted);
+    todoInput.value = '';
+}
+
+function deleteTodo() {
+    let listItem = this.parentNode;
+    let ul = listItem.parentNode;
+    ul.removeChild(listItem);
+}
+
+function todoCompleted() {
+    let listItem = this.parentNode;
+    listItem.querySelector('label').style.textDecoration = 'line-through';
+    bindTodoEvents(listItem, todoIncomplete);
+}
+
+function todoIncomplete() {
+    let listItem = this.parentNode;
+    listItem.querySelector('label').style.textDecoration = 'none';
+    bindTodoEvents(listItem, todoCompleted);
+}
+
+addButton.addEventListener('click', addTodo);
+
+function bindTodoEvents(todoListItem, checkBoxEventHandler) {
+    let checkBox = todoListItem.querySelector('input[type="checkbox"]');
+    let deleteButton = todoListItem.querySelector('button.delete-button');
+    checkBox.onchange = checkBoxEventHandler;
+    deleteButton.onclick = deleteTodo;
+}
+
+function enterKey(event) {
+    if (event.keyCode == 13) {
+        addTodo();
+        return false;
+    } 
+    else {
+        return true;
+    }
+}

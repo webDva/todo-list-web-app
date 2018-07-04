@@ -13,19 +13,33 @@
 
 <body>
     <div id="login" class="login flexbox-container">
-        <h1 class="login-head">Login (or <a href="/signup">sign up</a>)</h1>
+        <h1 class="header-type-1">Login (or <a href="/signup">sign up</a>)</h1>
         <div>
-            <label for="email">Email</label>
+            <label class="label-type-1" for="email">Email</label>
             <br>
-            <input required type="text" id="email">
+            <input class="input-type-1" required type="text" id="email">
         </div>
 
         <div>
-            <label for="password">Password</label>
+            <label class="label-type-1" for="password">Password</label>
             <br>
-            <input required type="password" id="password">
+            <input class="input-type-1" required type="password" id="password">
         </div>
-        <button type="submit" onclick="login()">Login</button>        
+        <button class="button-type-1" type="submit" onclick="login()">Login</button>        
+    </div>
+
+    <div id="free-notes" class="flexbox-container">
+        <h1 class="header-type-2">Or you can just use the app!</h1>
+        <div id="todolist-container" class="main-value-proposition">
+            <div id="add-container">
+                <label class="addnew-label" for="new-todo">Add a new to-do list item</label>
+                <input class="input-type-2" id="new-todo" type="text" onkeypress="return enterKey(event)">
+                <button class="button-type-2" id="add-todo-button">Add</button>
+            </div>
+
+            <h2 class="small-header">To-do list</h2>
+            <ul id="list-of-todos"></ul>
+        </div>
     </div>
     <script src="frontend.js"></script>
 </body>
