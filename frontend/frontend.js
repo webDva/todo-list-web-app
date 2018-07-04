@@ -83,12 +83,20 @@ function addTodo() {
     let deleteButton = listItem.querySelector('button.delete-button');
     deleteButton.onclick = completeTodo;
     todoInput.value = '';
+
+    // add to localStorage
+    todosLocalStorage.push(listItem.querySelector('label').innerText);
+    localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 }
 
 function completeTodo() {
     let listItem = this.parentNode;
     listItem.querySelector('label').style.textDecoration = 'line-through';
     listItem.querySelector('button.delete-button').innerText = '✔️';
+
+    // remove from localStorage
+    todosLocalStorage.splice(todosLocalStorage.indexOf(listItem.querySelector('label').innerText), 1);
+    localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 }
 
 addButton.addEventListener('click', addTodo);
@@ -106,6 +114,24 @@ function enterKey(event) {
 /*
 * Local storage
 */
+
+let todosLocalStorage;
+
+if (localStorage.getItem('todos')) {
+    todosLocalStorage = JSON.parse(localStorage.getItem('todos'));
+} else {
+    todosLocalStorage = [];
+}
+
+localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
+const dataFromLocalStorage = JSON.parse(localStorage.getItem('todos'));
+
+dataFromLocalStorage.forEach(todo => {
+    let listItem = createNewTodoElement(todo);
+    listOfTodos.appendChild(listItem);
+    let deleteButton = listItem.querySelector('button.delete-button');
+    deleteButton.onclick = completeTodo;
+});
 
 if (storageAvailable('localStorage')) {
     // localStorage is available
