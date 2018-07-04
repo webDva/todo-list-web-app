@@ -19,7 +19,8 @@ function signUp() {
         if (this.readyState == 4 && this.status == 200) {
             const response = JSON.parse(this.responseText);
             if (response.success === true) {
-                window.location.replace('/');
+                // log in on success
+                window.location.replace('/dashboard');
             }
         }
     };
@@ -40,6 +41,7 @@ function login() {
         if (this.readyState == 4 && this.status == 200) {
             const response = JSON.parse(this.responseText);
             if (response.success) {
+                // log in on success
                 window.location.replace("/dashboard");
             }
         }

@@ -37,7 +37,7 @@ app.use(session({
     secret: 'single quoates',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 100000 },
+    cookie: { maxAge: 180000 },
     store: new MongoStore({ url: databaseuri })
 }));
 
@@ -89,16 +89,19 @@ app.route('/signup')
                         db.close();
                         return res.send({ error: true });
                     } else {
+                        const new_id = uuidv4();
+
                         dbo.collection('accounts').insertOne({
-                            account_id: uuidv4(),
+                            account_id: new_id,
                             email: req.body.email,
                             password: bcrypt.hashSync(req.body.password, 12),
                             type: "account"
                         }, (err, result) => {
                             if (err) throw err;
-
-                            req.session.user = result.account_id;
                         });
+
+                        // log the user in
+                        req.session.user = new_id;
 
                         db.close();
                         return res.send({ success: true });
