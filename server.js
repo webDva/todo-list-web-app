@@ -36,7 +36,8 @@ app.use(bodyParser.json());
 app.use(session({
     secret: 'single quoates',
     resave: false,
-    saveUninitialized: true,
+    rolling: true,
+    saveUninitialized: false,
     cookie: { maxAge: 180000 },
     store: new MongoStore({ url: databaseuri })
 }));
