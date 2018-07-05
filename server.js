@@ -84,7 +84,7 @@ app.route('/signup')
 
             const dbo = db.db(databasename);
 
-            dbo.collection('accounts').findOne({ email: req.body.email })
+            dbo.collection('accounts').findOne({ username: req.body.username })
                 .then(result => {
                     if (err) throw err;
 
@@ -94,10 +94,9 @@ app.route('/signup')
                         return res.send({ success: false });
                     } else {
                         const new_id = uuidv4();
-
                         dbo.collection('accounts').insertOne({
                             account_id: new_id,
-                            email: req.body.email,
+                            username: req.body.username,
                             password: bcrypt.hashSync(req.body.password, 12),
                             type: "account"
                         }, (err, result) => {
@@ -127,7 +126,7 @@ app.route('/login')
 
             const dbo = db.db(databasename);
 
-            dbo.collection('accounts').findOne({ email: req.body.email })
+            dbo.collection('accounts').findOne({ username: req.body.username })
                 .then(result => {
                     if (err) throw err;
 

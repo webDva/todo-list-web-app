@@ -1,5 +1,5 @@
 function signUp() {
-    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
     if (document.getElementById('password').value != document.getElementById('confirm_password').value) {
@@ -12,7 +12,7 @@ function signUp() {
 
     xhr.open("POST", "/signup", true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({ email: email, password: password }));
+    xhr.send(JSON.stringify({ username: username, password: password }));
 
     // on success or failure
     xhr.onload = function () {
@@ -27,14 +27,14 @@ function signUp() {
 }
 
 function login() {
-    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
     let xhr = new XMLHttpRequest();
 
     xhr.open("POST", "/login", true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({ email: email, password: password }));
+    xhr.send(JSON.stringify({ username: username, password: password }));
 
     // on success or failure
     xhr.onload = function () {
