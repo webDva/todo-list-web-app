@@ -94,36 +94,32 @@ app.route('/signup')
 
             const dbo = db.db(databasename);
 
-            dbo.collection('accounts').findOne({ username: req.body.username })
-                .then(result => {
-                    if (err) throw err;
+            dbo.collection('accounts').findOne({ username: req.body.username }, (err, result) => {
+                if (err) throw err;
 
-                    // if an entry already exists, send an error to the client
-                    if (result) {
-                        db.close();
-                        return res.send({ success: false, reason: ACCOUNT_COLLISION });
-                    } else {
-                        // create a new account in the mongo database
-                        const new_id = uuidv4();
-                        dbo.collection('accounts').insertOne({
-                            account_id: new_id,
-                            username: req.body.username,
-                            password: bcrypt.hashSync(req.body.password, 12),
-                            type: "account"
-                        }, (err, result) => {
-                            if (err) throw err;
-                        });
+                // if an entry already exists, send an error to the client
+                if (result) {
+                    db.close();
+                    return res.send({ success: false, reason: ACCOUNT_COLLISION });
+                } else {
+                    // create a new account in the mongo database
+                    const new_id = uuidv4();
+                    dbo.collection('accounts').insertOne({
+                        account_id: new_id,
+                        username: req.body.username,
+                        password: bcrypt.hashSync(req.body.password, 12),
+                        type: "account"
+                    }, (err, result) => {
+                        if (err) throw err;
+                    });
 
-                        // log the user in by creating a new session named "user" with the account_id as the value
-                        req.session.user = new_id;
+                    // log the user in by creating a new session named "user" with the account_id as the value
+                    req.session.user = new_id;
 
-                        db.close();
-                        return res.send({ success: true });
-                    }
-                })
-                .catch(error => {
-                    return res.send({ success: false, reason: UNKNOWN_ERROR });
-                });
+                    db.close();
+                    return res.send({ success: true });
+                }
+            });
         });
     });
 
@@ -151,19 +147,21 @@ app.route('/login')
 
             const dbo = db.db(databasename);
 
-            dbo.collection('accounts').findOne({ username: req.body.username })
-                .then(result => {
-                    if (err) throw err;
+            dbo.collection('accounts').findOne({ username: req.body.username }, (err, result) => {
+                if (err) throw err;
 
-                    if (!result) { // non-existant account
-                        return res.send({ success: false, reason: NONEXISTANT_ACCOUNT });
-                    } else if (!bcrypt.compareSync(req.body.password, result.password)) { // wrong password
-                        return res.send({ success: false, reason: INCORRECT_PASSWORD });
-                    } else { // success
-                        req.session.user = result.account_id;
-                        return res.send({ success: true });
-                    }
-                });
+                if (!result) { // non-existant account
+                    db.close();
+                    return res.send({ success: false, reason: NONEXISTANT_ACCOUNT });
+                } else if (!bcrypt.compareSync(req.body.password, result.password)) { // wrong password
+                    db.close();
+                    return res.send({ success: false, reason: INCORRECT_PASSWORD });
+                } else { // success
+                    req.session.user = result.account_id;
+                    db.close();
+                    return res.send({ success: true });
+                }
+            });
         });
     });
 
