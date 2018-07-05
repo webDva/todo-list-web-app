@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>remindyou.io - Login</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/loginandsignup.css">
+</head>
+
+<body>
+    <div class="navigation-type-1">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="/signup">Sign up</a>
+                </nav>
+            </header>
+        </div>
+
+    <div id="login" class="login flexbox-container">
+        <h1 class="header-type-1">Login</h1>
+        <div>
+            <label class="label-type-1" for="email">Email</label>
+            <br>
+            <input class="input-type-1" required type="text" id="email">
+        </div>
+
+        <div>
+            <label class="label-type-1" for="password">Password</label>
+            <br>
+            <input class="input-type-1" required type="password" id="password">
+        </div>
+        <button class="button-type-1" type="submit" onclick="login()">Login</button>
+    </div>
+    <script src="js/loginandsignup.js"></script>
+</body>
+</html>

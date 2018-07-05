@@ -1,53 +1,3 @@
-function signUp() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (document.getElementById('password').value != document.getElementById('confirm_password').value) {
-        document.getElementById('password-label').innerHTML = 'Enter a password ❌';
-        document.getElementById('confirm_password-label').innerHTML = 'Confirm the password ❌';
-        return;
-    }
-
-    let xhr = new XMLHttpRequest();
-
-    xhr.open("POST", "/signup", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({ email: email, password: password }));
-
-    // on success or failure
-    xhr.onload = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            const response = JSON.parse(this.responseText);
-            if (response.success === true) {
-                // log in on success
-                window.location.replace('/dashboard');
-            }
-        }
-    };
-}
-
-function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    let xhr = new XMLHttpRequest();
-
-    xhr.open("POST", "/login", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({ email: email, password: password }));
-
-    // on success or failure
-    xhr.onload = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            const response = JSON.parse(this.responseText);
-            if (response.success) {
-                // log in on success
-                window.location.replace("/dashboard");
-            }
-        }
-    };
-}
-
 /*
 * For todo list functionality
 */
@@ -97,9 +47,7 @@ function completeTodo() {
     localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 }
 
-// check for the right page
-if (addButton)
-    addButton.addEventListener('click', addTodo);
+addButton.addEventListener('click', addTodo);
 
 function enterKey(event) {
     if (event.keyCode == 13) {
@@ -126,15 +74,13 @@ if (localStorage.getItem('todos')) {
 localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 const dataFromLocalStorage = JSON.parse(localStorage.getItem('todos'));
 
-// check for the right page
-if (addButton) {
-    dataFromLocalStorage.forEach(todo => {
-        let listItem = createNewTodoElement(todo);
-        listOfTodos.appendChild(listItem);
-        let deleteButton = listItem.querySelector('button.delete-button');
-        deleteButton.onclick = completeTodo;
-    });
-}
+
+dataFromLocalStorage.forEach(todo => {
+    let listItem = createNewTodoElement(todo);
+    listOfTodos.appendChild(listItem);
+    let deleteButton = listItem.querySelector('button.delete-button');
+    deleteButton.onclick = completeTodo;
+});
 
 if (storageAvailable('localStorage')) {
     // localStorage is available
@@ -143,7 +89,7 @@ if (storageAvailable('localStorage')) {
     // localStorage is not available
   }
 
-  function storageAvailable(type) {
+function storageAvailable(type) {
     try {
         let storage = window[type],
             x = '__storage_test__';

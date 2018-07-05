@@ -68,12 +68,12 @@ const sessionChecker = (req, res, next) => {
 
 app.route('/')
     .get(sessionChecker, (req, res) => {
-        res.sendFile(path.join(__dirname, '/frontend/index.html'));
+        res.sendFile(path.join(__dirname, '/public/index.html'));
     });
 
 app.route('/signup')
     .get(sessionChecker, (req, res) => {
-        res.sendFile(path.join(__dirname, '/frontend/signup.html'));
+        res.sendFile(path.join(__dirname, '/public/signup.html'));
     })
     .post((req, res) => {
         MongoClient.connect(databaseuri + databasename, (err, db) => {
@@ -115,6 +115,9 @@ app.route('/signup')
     });
 
 app.route('/login')
+    .get(sessionChecker, (req, res) => {
+        res.sendFile(path.join(__dirname, '/public/login.html'));
+    })
     .post((req, res) => {
         MongoClient.connect(databaseuri + databasename, (err, db) => {
             if (err) throw err;
@@ -139,7 +142,7 @@ app.route('/login')
 
 app.get('/dashboard', (req, res) => {
     if (req.session.user) {
-        return res.sendFile(__dirname + '/frontend/dashboard.html');
+        return res.sendFile(__dirname + '/public/dashboard.html');
     } else {
         return res.redirect('/');
     }
@@ -160,7 +163,7 @@ app.use(function (err, req, res, next) {
  */
 
 // Point static path to dist
-app.use(express.static(path.join(__dirname, '/frontend')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 // Start the HTTP server.
 app.listen(PORT, (err) => {

@@ -1,0 +1,47 @@
+/*
+* General
+*/
+
+html, body {
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+    color: white;
+    background-color: #2F2FA2;
+  }
+  
+.flexbox-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  
+}
+
+a {
+    color: #F64C72;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #c43c5b;
+}
+
+.navigation-type-1 {
+    margin-bottom: 30px;
+    padding: 12px;
+}
+
+nav {
+    float: right;
+    font-size: 24px;
+}
+
+nav > a {
+    margin-left: 20px;
+    padding: 6px;
+    border: 2px solid #F64C72;
+}
+
+nav > a:hover {
+    border-color: #c43c5b;
+}

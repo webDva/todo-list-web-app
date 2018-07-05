@@ -8,12 +8,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/loginandsignup.css">
 </head>
 
 <body>
+    <div class="navigation-type-1">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="/login">Login</a>
+                </nav>
+            </header>
+        </div>
+
     <div class="signup flexbox-container">
-        <h1 class="header-type-1">Sign up (or <a href="/">back to log-in</a>)</h1>
+        <h1 class="header-type-1">Sign up</h1>
         <div>
             <label class="label-type-1" for="email">Enter an e-mail address</label>
             <br>
@@ -33,6 +43,6 @@
         </div>
         <button class="button-type-1" type="submit" onclick="signUp()">Submit</button>
     </div>
-    <script src="frontend.js"></script>
+    <script src="js/loginandsignup.js"></script>
 </body>
 </html>
