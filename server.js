@@ -21,8 +21,8 @@ const bcrypt = require('bcrypt');
 * MongoDB
 */
 
-const databasename = 'remindyouio_database'
-const databaseuri = 'mongodb://localhost:27017/'
+const databasename = 'todolistapp';
+const databaseuri = 'mongodb://localhost:27017/';
 
 /*
  * API Server
