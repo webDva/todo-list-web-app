@@ -103,6 +103,7 @@ app.route('/signup')
                         db.close();
                         return res.send({ success: false, reason: ACCOUNT_COLLISION });
                     } else {
+                        // create a new account in the mongo database
                         const new_id = uuidv4();
                         dbo.collection('accounts').insertOne({
                             account_id: new_id,
@@ -113,7 +114,7 @@ app.route('/signup')
                             if (err) throw err;
                         });
 
-                        // log the user in
+                        // log the user in by creating a new session named "user" with the account_id as the value
                         req.session.user = new_id;
 
                         db.close();
@@ -154,11 +155,11 @@ app.route('/login')
                 .then(result => {
                     if (err) throw err;
 
-                    if (!result) {
+                    if (!result) { // non-existant account
                         return res.send({ success: false, reason: NONEXISTANT_ACCOUNT });
-                    } else if (!bcrypt.compareSync(req.body.password, result.password)) {
+                    } else if (!bcrypt.compareSync(req.body.password, result.password)) { // wrong password
                         return res.send({ success: false, reason: INCORRECT_PASSWORD });
-                    } else {
+                    } else { // success
                         req.session.user = result.account_id;
                         return res.send({ success: true });
                     }
@@ -173,7 +174,7 @@ app.get('/logout', (req, res) => {
         res.clearCookie(cookiename);
         return res.send({ success: true });
     } else {
-        return res.redirect('/');
+        return res.send({ success: false});
     }
 });
 
