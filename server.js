@@ -113,6 +113,16 @@ app.route('/signup')
                         if (err) throw err;
                     });
 
+                    // create a document to store the user's to-dos
+                    dbo.collection('todo_lists').insertOne({
+                        account_id: new_id,
+                        username: req.body.username,
+                        todos: [],
+                        type: 'todo_list'
+                    }, (err, result) => {
+                        if (err) throw err;
+                    });
+
                     // log the user in by creating a new session named "user" with the account_id as the value
                     req.session.user = new_id;
 
