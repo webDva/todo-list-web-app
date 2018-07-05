@@ -33,6 +33,8 @@ const app = express();
 app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
 
+// business application constants
+
 const cookiename = 'todolist_webapp';
 
 const ACCOUNT_COLLISION = 1;
@@ -40,6 +42,7 @@ const UNKNOWN_ERROR = 2;
 const NONEXISTANT_ACCOUNT = 3;
 const INCORRECT_PASSWORD = 4;
 
+// session configuration
 app.use(session({
     secret: 'single quoates',
     resave: false,
@@ -74,11 +77,13 @@ const sessionChecker = (req, res, next) => {
     }
 };
 
+// root
 app.route('/')
     .get(sessionChecker, (req, res) => {
         res.sendFile(path.join(__dirname, '/public/index.html'));
     });
 
+// sign-up
 app.route('/signup')
     .get(sessionChecker, (req, res) => {
         res.sendFile(path.join(__dirname, '/public/signup.html'));
@@ -121,6 +126,20 @@ app.route('/signup')
         });
     });
 
+// user's dashboard
+app.get('/notes', (req, res) => {
+    if (req.session.user) {
+        return res.sendFile(__dirname + '/public/notes.html');
+    } else {
+        return res.redirect('/');
+    }
+});
+
+//
+// Login and logout
+//
+
+//login
 app.route('/login')
     .get(sessionChecker, (req, res) => {
         res.sendFile(path.join(__dirname, '/public/login.html'));
@@ -147,14 +166,7 @@ app.route('/login')
         });
     });
 
-app.get('/notes', (req, res) => {
-    if (req.session.user) {
-        return res.sendFile(__dirname + '/public/notes.html');
-    } else {
-        return res.redirect('/');
-    }
-});
-
+// logout
 app.get('/logout', (req, res) => {
     if (req.session.user && req.session.cookie) {
         req.session.user = null;
@@ -164,6 +176,12 @@ app.get('/logout', (req, res) => {
         return res.redirect('/');
     }
 });
+
+//
+// To-do list routes
+//
+
+
 
 /*
 * Error Handling
