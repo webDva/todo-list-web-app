@@ -41,6 +41,7 @@ const ACCOUNT_COLLISION = 1;
 const UNKNOWN_ERROR = 2;
 const NONEXISTANT_ACCOUNT = 3;
 const INCORRECT_PASSWORD = 4;
+const INVALID_SESSION = 5;
 
 // session configuration
 app.use(session({
@@ -72,6 +73,15 @@ app.use((req, res, next) => {
 const sessionChecker = (req, res, next) => {
     if (req.session.user && req.session.cookie) {
         res.redirect('/notes');
+    } else {
+        next();
+    }
+};
+
+// to prevent unauthorized sessions. users must be logged in
+const validSessionChecker = (req, res, next) => {
+    if (!req.session.user && !req.session.cookie) {
+        return res.send({ success: false, reason: INVALID_SESSION });
     } else {
         next();
     }
@@ -190,7 +200,30 @@ app.get('/logout', (req, res) => {
 // To-do list routes
 //
 
+app.get('/retrieveTodos', validSessionChecker, (req, res) => {
+    MongoClient.connect(databaseuri + databasename, (err, db) => {
+        if (err) throw err;
+        const dbo = db.db(databasename);
+        dbo.collection('todo_lists').findOne({ account_id: req.session.user }, (err, result) => {
+            if (err) throw err;
+            db.close();
+            if (!result) return res.send({ success: false, reason: UNKNOWN_ERROR });
+            return res.send({ success: true, todos: result.todos });
+        });
+    });    
+});
 
+app.post('/pushLocalStorage', validSessionChecker, (req, res) => {
+    MongoClient.connect(databaseuri + databasename, (err, db) => {
+        if (err) throw err;
+        const dbo = db.db(databasename);
+        dbo.collection('todo_lists').updateOne({ account_id: req.session.user }, { $set: { todos: req.body.todos } }, (err, result) => {
+            if (err) throw err;
+            db.close();
+            return res.send({ success: true });
+        });
+    });
+});
 
 /*
 * Error Handling
