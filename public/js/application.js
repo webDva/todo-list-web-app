@@ -1,10 +1,17 @@
+//
+// Initializations
+//
+
+let todosLocalStorage;
+
+function start() {
+    document.getElementById("add-todo-button").addEventListener('click', addTodo);
+    initializeLocalStorage();
+}
+
 /*
 * For todo list functionality
 */
-
-const todoInput = document.getElementById("new-todo");
-const addButton = document.getElementById("add-todo-button");
-const listOfTodos = document.getElementById("list-of-todos");
 
 function createNewTodoElement(todoText) {
     let listItem = document.createElement("li");
@@ -26,11 +33,11 @@ function createNewTodoElement(todoText) {
 }
 
 function addTodo() {
-    let listItem = createNewTodoElement(todoInput.value);
-    listOfTodos.appendChild(listItem);
+    let listItem = createNewTodoElement(document.getElementById("new-todo").value);
+    document.getElementById("list-of-todos").appendChild(listItem);
     let deleteButton = listItem.querySelector('button.delete-button');
     deleteButton.onclick = completeTodo;
-    todoInput.value = '';
+    document.getElementById("new-todo").value = '';
 
     // add to localStorage
     todosLocalStorage.push(listItem.querySelector('label').innerText);
@@ -47,8 +54,6 @@ function completeTodo() {
     localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 }
 
-addButton.addEventListener('click', addTodo);
-
 function enterKey(event) {
     if (event.keyCode == 13) {
         addTodo();
@@ -63,31 +68,29 @@ function enterKey(event) {
 * Local storage
 */
 
-let todosLocalStorage;
+function initializeLocalStorage() {
+    if (storageAvailable('localStorage')) {
+        // localStorage is available
+      }
+      else {
+        // localStorage is not available
+    }
 
-if (localStorage.getItem('todos')) {
-    todosLocalStorage = JSON.parse(localStorage.getItem('todos'));
-} else {
-    todosLocalStorage = [];
+    if (localStorage.getItem('todos')) {
+        todosLocalStorage = JSON.parse(localStorage.getItem('todos'));
+    } else {
+        todosLocalStorage = [];
+    }
+    
+    localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
+
+    JSON.parse(localStorage.getItem('todos')).forEach(todo => {
+        let listItem = createNewTodoElement(todo);
+        document.getElementById("list-of-todos").appendChild(listItem);
+        let deleteButton = listItem.querySelector('button.delete-button');
+        deleteButton.onclick = completeTodo;
+    });    
 }
-
-localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
-const dataFromLocalStorage = JSON.parse(localStorage.getItem('todos'));
-
-
-dataFromLocalStorage.forEach(todo => {
-    let listItem = createNewTodoElement(todo);
-    listOfTodos.appendChild(listItem);
-    let deleteButton = listItem.querySelector('button.delete-button');
-    deleteButton.onclick = completeTodo;
-});
-
-if (storageAvailable('localStorage')) {
-    // localStorage is available
-  }
-  else {
-    // localStorage is not available
-  }
 
 function storageAvailable(type) {
     try {
