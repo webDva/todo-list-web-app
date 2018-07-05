@@ -81,7 +81,6 @@ function initializeLocalStorage() {
     localStorage.setItem('todos', JSON.stringify(todosLocalStorage));
 }
 
-// used by non-users (users without accounts)
 function populateUsingLocalStorage() {
     JSON.parse(localStorage.getItem('todos')).forEach(todo => {
         let listItem = createNewTodoElement(todo);
@@ -130,6 +129,14 @@ function retrieveInitialDisplay() {
             if (!response.todos) return;
             if (response.todos.length === 0 && localStorage.getItem('todos')) {
                 pushLocalStorageToServer();
+                initializeLocalStorage();
+                populateUsingLocalStorage();
+            } else {
+                // save the server's response of to-dos to localStorage
+                localStorage.setItem('todos', JSON.stringify(response.todos));
+                // now populate the display
+                initializeLocalStorage();
+                populateUsingLocalStorage();
             }
         }
     };
@@ -139,7 +146,7 @@ function pushLocalStorageToServer() {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/pushLocalStorage', true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({ todos: JSON.parse(localStorage.getItem('todos')) }));    
+    xhr.send(JSON.stringify({ todos: JSON.parse(localStorage.getItem('todos')) }));
 }
 
 //
@@ -147,8 +154,10 @@ function pushLocalStorageToServer() {
 //
 
 function logout() {
-    let xhr = new XMLHttpRequest();
+    // clear localStorage to prevent the user from being confused
+    localStorage.removeItem('todos');
 
+    let xhr = new XMLHttpRequest();
     xhr.open("GET", "/logout", true);
     xhr.send();
 
