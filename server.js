@@ -35,6 +35,11 @@ app.use(bodyParser.json());
 
 const cookiename = 'todolist_webapp';
 
+const ACCOUNT_COLLISION = 1;
+const UNKNOWN_ERROR = 2;
+const NONEXISTANT_ACCOUNT = 3;
+const INCORRECT_PASSWORD = 4;
+
 app.use(session({
     secret: 'single quoates',
     resave: false,
@@ -91,7 +96,7 @@ app.route('/signup')
                     // if an entry already exists, send an error to the client
                     if (result) {
                         db.close();
-                        return res.send({ success: false });
+                        return res.send({ success: false, reason: ACCOUNT_COLLISION });
                     } else {
                         const new_id = uuidv4();
                         dbo.collection('accounts').insertOne({
@@ -111,7 +116,7 @@ app.route('/signup')
                     }
                 })
                 .catch(error => {
-                    return res.send({ success: false });
+                    return res.send({ success: false, reason: UNKNOWN_ERROR });
                 });
         });
     });
@@ -131,9 +136,9 @@ app.route('/login')
                     if (err) throw err;
 
                     if (!result) {
-                        return res.send({ success: false });
+                        return res.send({ success: false, reason: NONEXISTANT_ACCOUNT });
                     } else if (!bcrypt.compareSync(req.body.password, result.password)) {
-                        return res.send({ success: false });
+                        return res.send({ success: false, reason: INCORRECT_PASSWORD });
                     } else {
                         req.session.user = result.account_id;
                         return res.send({ success: true });
@@ -167,7 +172,7 @@ app.get('/logout', (req, res) => {
 app.use(function (err, req, res, next) {
     // more than likely malformed json
     console.log("[ERROR] " + err);
-    return res.send({ success: false, "failed": "nope.avi" });
+    return res.send({ success: false, reason: UNKNOWN_ERROR });
 });
 
 /*
