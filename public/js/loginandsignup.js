@@ -20,7 +20,7 @@ function signUp() {
             const response = JSON.parse(this.responseText);
             if (response.success === true) {
                 // log in on success
-                window.location.replace('/dashboard');
+                window.location.replace('/notes');
             }
         }
     };
@@ -42,7 +42,7 @@ function login() {
             const response = JSON.parse(this.responseText);
             if (response.success) {
                 // log in on success
-                window.location.replace("/dashboard");
+                window.location.replace("/notes");
             }
         }
     };

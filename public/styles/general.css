@@ -49,3 +49,18 @@ nav > a {
 nav > a:hover {
     border-color: #c43c5b;
 }
+
+.navigation-button-type {
+    float: right;
+    border: 3px solid #F64C72;
+    font-size: 20px;
+    color: white;
+    background-color: transparent;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;    
+}
+
+.navigation-button-type:hover {
+    background-color: #F64C72;
+}

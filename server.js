@@ -33,12 +33,15 @@ const app = express();
 app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
 
+const cookiename = 'todolist_webapp';
+
 app.use(session({
     secret: 'single quoates',
     resave: false,
     rolling: true,
     saveUninitialized: false,
     cookie: { maxAge: 180000 },
+    name: cookiename,
     store: new MongoStore({ url: databaseuri })
 }));
 
@@ -52,7 +55,7 @@ app.set('port', PORT);
 // check if user's cookie is still saved in browser and user is not set, then automatically log the user out
 app.use((req, res, next) => {
     if (req.session.cookie && !req.session.user) {
-        res.clearCookie('connect.sid');
+        res.clearCookie(cookiename);
     }
     next();
 });
@@ -60,7 +63,7 @@ app.use((req, res, next) => {
 // middleware function to check for logged-in users
 const sessionChecker = (req, res, next) => {
     if (req.session.user && req.session.cookie) {
-        res.redirect('/dashboard');
+        res.redirect('/notes');
     } else {
         next();
     }
@@ -88,7 +91,7 @@ app.route('/signup')
                     // if an entry already exists, send an error to the client
                     if (result) {
                         db.close();
-                        return res.send({ error: true });
+                        return res.send({ success: false });
                     } else {
                         const new_id = uuidv4();
 
@@ -109,7 +112,7 @@ app.route('/signup')
                     }
                 })
                 .catch(error => {
-                    return res.send({ error: true });
+                    return res.send({ success: false });
                 });
         });
     });
@@ -129,9 +132,9 @@ app.route('/login')
                     if (err) throw err;
 
                     if (!result) {
-                        return res.send({ error: true });
+                        return res.send({ success: false });
                     } else if (!bcrypt.compareSync(req.body.password, result.password)) {
-                        return res.send({ error: true });
+                        return res.send({ success: false });
                     } else {
                         req.session.user = result.account_id;
                         return res.send({ success: true });
@@ -140,9 +143,19 @@ app.route('/login')
         });
     });
 
-app.get('/dashboard', (req, res) => {
+app.get('/notes', (req, res) => {
     if (req.session.user) {
-        return res.sendFile(__dirname + '/public/dashboard.html');
+        return res.sendFile(__dirname + '/public/notes.html');
+    } else {
+        return res.redirect('/');
+    }
+});
+
+app.get('/logout', (req, res) => {
+    if (req.session.user && req.session.cookie) {
+        req.session.user = null;
+        res.clearCookie(cookiename);
+        return res.send({ success: true });
     } else {
         return res.redirect('/');
     }
@@ -155,7 +168,7 @@ app.get('/dashboard', (req, res) => {
 app.use(function (err, req, res, next) {
     // more than likely malformed json
     console.log("[ERROR] " + err);
-    return res.send({ "failed": "nope.avi" });
+    return res.send({ success: false, "failed": "nope.avi" });
 });
 
 /*

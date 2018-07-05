@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>remindyou.io - Notes</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/application.css">
+</head>
+
+<body>
+    <div class="navigation-type-1">
+        <button class="navigation-button-type" type="submit" onclick="logout()">Logout</button>
+    </div>
+
+    <div id="free-notes" class="flexbox-container">
+            <h1 class="header-type-2">Your notes</h1>
+            <div id="todolist-container" class="main-value-proposition">
+                <div id="add-container">
+                    <label class="addnew-label" for="new-todo">Add a new to-do list item</label>
+                    <input class="input-type-2" id="new-todo" type="text" onkeypress="return enterKey(event)">
+                    <button class="button-type-2" id="add-todo-button">Add</button>
+                </div>
+    
+                <h2 class="small-header">To-do list</h2>
+                <ul id="list-of-todos"></ul>
+            </div>
+        </div>    
+    <script src="js/application.js"></script>
+</body>
+</html>

@@ -111,3 +111,23 @@ function storageAvailable(type) {
             storage.length !== 0;
     }
 }
+
+//
+// logout functionality
+//
+
+function logout() {
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("GET", "/logout", true);
+    xhr.send();
+
+    xhr.onload = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            if (response.success) {
+                window.location.replace("/");
+            }
+        }
+    };
+}
