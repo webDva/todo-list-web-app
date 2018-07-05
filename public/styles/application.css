@@ -4,7 +4,8 @@
 
 .header-type-2 {
     padding: 0.8rem;
-    text-align: center;
+    text-align: left;
+    max-width: 90%;
     margin: 2rem 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
