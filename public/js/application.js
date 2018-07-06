@@ -6,6 +6,8 @@ retrieveTodos((todos) => {
     populateFromList(todoList);
 });
 
+retrieveUsername();
+
 function updateTodos() {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/updateTodos', true);
@@ -20,10 +22,23 @@ function retrieveTodos(callback) {
     xhr.onload = function () {
         if (this.readyState == 4 && this.status == 200) {
             const response = JSON.parse(this.responseText);
-            if (!response.todos) return;
+            if (!response.success) return;
             callback(response.todos);
         }
     };
+}
+
+function retrieveUsername() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/retrieveUsername', true);
+    xhr.send();
+    xhr.onload = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            if (!response.success) return;
+            document.getElementsByClassName('header-type-1')[0].innerText = response.username + "'s to-dos";
+        }
+    };    
 }
 
 function createNewTodoElement(todoText) {

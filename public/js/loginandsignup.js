@@ -17,9 +17,9 @@ function signUp() {
     xhr.onload = function () {
         if (this.readyState == 4 && this.status == 200) {
             const response = JSON.parse(this.responseText);
-            if (response.success === true) {
+            if (response.success) {
                 // log in on success
-                window.location.replace('/notes');
+                window.location.replace('/todos');
             } else {
                 document.getElementById('username-label').innerHTML = 'Username already exists ❌';
             }
@@ -43,7 +43,7 @@ function login() {
             const response = JSON.parse(this.responseText);
             if (response.success) {
                 // log in on success
-                window.location.replace("/notes");
+                window.location.replace("/todos");
             } else {
                 document.getElementById('username-label').innerHTML = 'Username ❌';
                 document.getElementById('password-label').innerHTML = 'Password ❌';

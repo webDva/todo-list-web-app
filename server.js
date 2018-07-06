@@ -42,6 +42,7 @@ const UNKNOWN_ERROR = 2;
 const NONEXISTANT_ACCOUNT = 3;
 const INCORRECT_PASSWORD = 4;
 const INVALID_SESSION = 5;
+const INVALID_INPUT = 6;
 
 // session configuration
 app.use(session({
@@ -72,7 +73,7 @@ app.use((req, res, next) => {
 // middleware function to check for logged-in users
 const sessionChecker = (req, res, next) => {
     if (req.session.user && req.session.cookie) {
-        res.redirect('/notes');
+        res.redirect('/todos');
     } else {
         next();
     }
@@ -99,6 +100,11 @@ app.route('/signup')
         res.sendFile(path.join(__dirname, '/public/signup.html'));
     })
     .post((req, res) => {
+        // validation
+        if (req.body.username === '' || req.body.password === '') {
+            return res.send({ success: false, reason: INVALID_INPUT });
+        }
+
         MongoClient.connect(databaseuri + databasename, (err, db) => {
             if (err) throw err;
 
@@ -144,9 +150,9 @@ app.route('/signup')
     });
 
 // user's dashboard
-app.get('/notes', (req, res) => {
+app.get('/todos', (req, res) => {
     if (req.session.user) {
-        return res.sendFile(__dirname + '/public/notes.html');
+        return res.sendFile(__dirname + '/public/todos.html');
     } else {
         return res.redirect('/');
     }
@@ -162,6 +168,11 @@ app.route('/login')
         res.sendFile(path.join(__dirname, '/public/login.html'));
     })
     .post((req, res) => {
+        // validation
+        if (req.body.username === '' || req.body.password === '') {
+            return res.send({ success: false, reason: INVALID_INPUT });
+        }
+
         MongoClient.connect(databaseuri + databasename, (err, db) => {
             if (err) throw err;
 
@@ -210,7 +221,7 @@ app.get('/retrieveTodos', validSessionChecker, (req, res) => {
             if (!result) return res.send({ success: false, reason: UNKNOWN_ERROR });
             return res.send({ success: true, todos: result.todos });
         });
-    });    
+    });
 });
 
 app.post('/updateTodos', validSessionChecker, (req, res) => {
@@ -221,6 +232,20 @@ app.post('/updateTodos', validSessionChecker, (req, res) => {
             if (err) throw err;
             db.close();
             return res.send({ success: true });
+        });
+    });
+});
+
+// retrieve account username
+app.get('/retrieveUsername', validSessionChecker, (req, res) => {
+    MongoClient.connect(databaseuri + databasename, (err, db) => {
+        if (err) throw err;
+        const dbo = db.db(databasename);
+        dbo.collection('accounts').findOne({ account_id: req.session.user }, (err, result) => {
+            if (err) throw err;
+            db.close();
+            if (!result) return res.send({ success: false, reason: UNKNOWN_ERROR });
+            return res.send({ success: true, username: result.username });
         });
     });
 });
