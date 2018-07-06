@@ -1,17 +1,18 @@
 const env = process.env.NODE_ENV || 'development';
 
 if (env === 'development') {
-    process.env.PORT = 3000;
-    databaseuri = 'mongodb://localhost:27017/'; // remember to set the other condition for production
+    DATABASEURI = 'mongodb://localhost:27017/';
+    SECURE_COOKIES = false;
 } else {
-    
+    DATABASEURI = process.env.MONGOWHATEVER; // whatever it may be on a production server
+    SECURE_COOKIES = true;
 }
 
 // business application constants
 
-databasename = 'todolistapp';
+DATABASENAME = 'todolistapp';
 
-cookiename = 'todolist_webapp';
+COOKIENAME = 'todolist_webapp';
 
 ACCOUNT_COLLISION = 1;
 UNKNOWN_ERROR = 2;

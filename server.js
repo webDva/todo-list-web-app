@@ -34,9 +34,9 @@ app.use(session({
     resave: false,
     rolling: true,
     saveUninitialized: false,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
-    name: cookiename,
-    store: new MongoStore({ url: databaseuri })
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000, secure: SECURE_COOKIES },
+    name: COOKIENAME,
+    store: new MongoStore({ url: DATABASEURI })
 }));
 
 const PORT = process.env.PORT || '3000';
@@ -49,7 +49,7 @@ app.set('port', PORT);
 // check if user's cookie is still saved in browser and user is not set, then automatically log the user out
 app.use((req, res, next) => {
     if (req.session.cookie && !req.session.user) {
-        res.clearCookie(cookiename);
+        res.clearCookie(COOKIENAME);
     }
     next();
 });
@@ -95,10 +95,10 @@ app.route('/signup')
             return res.send({ success: false, reason: INVALID_INPUT });
         }
 
-        MongoClient.connect(databaseuri + databasename, (err, db) => {
+        MongoClient.connect(DATABASEURI + DATABASENAME, (err, db) => {
             if (err) throw err;
 
-            const dbo = db.db(databasename);
+            const dbo = db.db(DATABASENAME);
 
             dbo.collection('accounts').findOne({ username: req.body.username }, (err, result) => {
                 if (err) throw err;
@@ -163,10 +163,10 @@ app.route('/login')
             return res.send({ success: false, reason: INVALID_INPUT });
         }
 
-        MongoClient.connect(databaseuri + databasename, (err, db) => {
+        MongoClient.connect(DATABASEURI + DATABASENAME, (err, db) => {
             if (err) throw err;
 
-            const dbo = db.db(databasename);
+            const dbo = db.db(DATABASENAME);
 
             dbo.collection('accounts').findOne({ username: req.body.username }, (err, result) => {
                 if (err) throw err;
@@ -190,7 +190,7 @@ app.route('/login')
 app.get('/logout', (req, res) => {
     if (req.session.user && req.session.cookie) {
         req.session.user = null;
-        res.clearCookie(cookiename);
+        res.clearCookie(COOKIENAME);
         return res.redirect('/');
     } else {
         return res.redirect('/');
@@ -202,9 +202,9 @@ app.get('/logout', (req, res) => {
 //
 
 app.get('/retrieveTodos', validSessionChecker, (req, res) => {
-    MongoClient.connect(databaseuri + databasename, (err, db) => {
+    MongoClient.connect(DATABASEURI + DATABASENAME, (err, db) => {
         if (err) throw err;
-        const dbo = db.db(databasename);
+        const dbo = db.db(DATABASENAME);
         dbo.collection('todo_lists').findOne({ account_id: req.session.user }, (err, result) => {
             if (err) throw err;
             db.close();
@@ -215,9 +215,9 @@ app.get('/retrieveTodos', validSessionChecker, (req, res) => {
 });
 
 app.post('/updateTodos', validSessionChecker, (req, res) => {
-    MongoClient.connect(databaseuri + databasename, (err, db) => {
+    MongoClient.connect(DATABASEURI + DATABASENAME, (err, db) => {
         if (err) throw err;
-        const dbo = db.db(databasename);
+        const dbo = db.db(DATABASENAME);
         dbo.collection('todo_lists').updateOne({ account_id: req.session.user }, { $set: { todos: req.body.todos } }, (err, result) => {
             if (err) throw err;
             db.close();
@@ -228,9 +228,9 @@ app.post('/updateTodos', validSessionChecker, (req, res) => {
 
 // retrieve account username
 app.get('/retrieveUsername', validSessionChecker, (req, res) => {
-    MongoClient.connect(databaseuri + databasename, (err, db) => {
+    MongoClient.connect(DATABASEURI + DATABASENAME, (err, db) => {
         if (err) throw err;
-        const dbo = db.db(databasename);
+        const dbo = db.db(DATABASENAME);
         dbo.collection('accounts').findOne({ account_id: req.session.user }, (err, result) => {
             if (err) throw err;
             db.close();
