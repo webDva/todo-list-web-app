@@ -94,6 +94,12 @@ app.route('/')
         res.sendFile(path.join(__dirname, '/public/index.html'));
     });
 
+// demo
+app.route('/demo')
+    .get(sessionChecker, (req, res) => {
+        res.sendFile(path.join(__dirname, '/public/demo.html'));
+    });
+
 // sign-up
 app.route('/signup')
     .get(sessionChecker, (req, res) => {

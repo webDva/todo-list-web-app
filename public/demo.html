@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tanjunapp - Demo</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/application.css">
+</head>
+
+<body>
+    <div class="navigation-type-1">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="/login">Login</a>
+                    <a href="/signup">Sign up</a>
+                </nav>
+            </header>
+        </div>
+
+    <div class="flexbox-container">
+            <h1 class="header-type-1">You can try the free version that can still save your to-do list</h1>
+            <div id="todolist-container" class="main-value-proposition">
+                <div id="add-container">
+                    <label class="addnew-label" for="new-todo">Add a new to-do list item</label>
+                    <input class="input-type-2" id="new-todo" type="text" onkeypress="return enterKey(event)">
+                    <button class="button-type-2" id="add-todo-button">Add</button>
+                </div>
+    
+                <h2 class="small-header">To-do list</h2>
+                <ul id="list-of-todos"></ul>
+            </div>
+        </div>    
+    <script src="js/demo.js"></script>
+</body>
+</html>
