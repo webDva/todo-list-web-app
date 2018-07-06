@@ -14,11 +14,15 @@
 
 <body>
     <div class="navigation-type-1">
-        <button class="navigation-button-type" type="submit" onclick="logout()">Logout</button>
-    </div>
+        <header>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
+    </div> 
 
-    <div id="free-notes" class="flexbox-container">
-            <h1 class="header-type-2">Your notes</h1>
+    <div class="flexbox-container">
+            <h1 class="header-type-1">Your notes</h1>
             <div id="todolist-container" class="main-value-proposition">
                 <div id="add-container">
                     <label class="addnew-label" for="new-todo">Add a new to-do list item</label>
@@ -31,9 +35,5 @@
             </div>
         </div>    
     <script src="js/application.js"></script>
-    <script>
-        retrieveInitialDisplay();
-        initializeLocalStorage();
-    </script>
 </body>
 </html>

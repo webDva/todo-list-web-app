@@ -190,9 +190,9 @@ app.get('/logout', (req, res) => {
     if (req.session.user && req.session.cookie) {
         req.session.user = null;
         res.clearCookie(cookiename);
-        return res.send({ success: true });
+        return res.redirect('/');
     } else {
-        return res.send({ success: false});
+        return res.redirect('/');
     }
 });
 
@@ -213,7 +213,7 @@ app.get('/retrieveTodos', validSessionChecker, (req, res) => {
     });    
 });
 
-app.post('/pushLocalStorage', validSessionChecker, (req, res) => {
+app.post('/updateTodos', validSessionChecker, (req, res) => {
     MongoClient.connect(databaseuri + databasename, (err, db) => {
         if (err) throw err;
         const dbo = db.db(databasename);

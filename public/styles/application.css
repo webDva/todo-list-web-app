@@ -2,19 +2,6 @@
 *  Todo list functionality
 */
 
-.header-type-2 {
-    padding: 0.8rem;
-    text-align: left;
-    max-width: 90%;
-    margin: 2rem 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-    position: relative;
-    display: inline-block;
-
-    font-size: 2.6em;    
-}
-
 .main-value-proposition {
     width: 500px;
     max-width: 90%;
