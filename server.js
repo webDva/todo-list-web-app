@@ -17,12 +17,8 @@ const MongoClient = require('mongodb').MongoClient;
 const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt');
 
-/*
-* MongoDB
-*/
-
-const databasename = 'todolistapp';
-const databaseuri = 'mongodb://localhost:27017/';
+// load config and its constants
+require('./config');
 
 /*
  * API Server
@@ -31,18 +27,6 @@ const databaseuri = 'mongodb://localhost:27017/';
 const app = express();
 // Needed for POST requests.
 app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
-
-// business application constants
-
-const cookiename = 'todolist_webapp';
-
-const ACCOUNT_COLLISION = 1;
-const UNKNOWN_ERROR = 2;
-const NONEXISTANT_ACCOUNT = 3;
-const INCORRECT_PASSWORD = 4;
-const INVALID_SESSION = 5;
-const INVALID_INPUT = 6;
 
 // session configuration
 app.use(session({
