@@ -17,7 +17,7 @@ const MongoClient = require('mongodb').MongoClient;
 const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt');
 
-// load config and its constants
+// load the configuration constants in the config.js file into this global namespace
 require('./config');
 
 /*
@@ -30,11 +30,11 @@ app.use(bodyParser.json());
 
 // session configuration
 app.use(session({
-    secret: 'single quoates',
+    secret: "doesn't matter. this can be anything you want",
     resave: false,
     rolling: true,
     saveUninitialized: false,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000, secure: SECURE_COOKIES },
+    cookie: { maxAge: 3 * 60 * 1000, secure: SECURE_COOKIES },
     name: COOKIENAME,
     store: new MongoStore({ url: DATABASEURI })
 }));
@@ -218,6 +218,7 @@ app.post('/updateTodos', validSessionChecker, (req, res) => {
     MongoClient.connect(DATABASEURI + DATABASENAME, (err, db) => {
         if (err) throw err;
         const dbo = db.db(DATABASENAME);
+        // replaces the current list value
         dbo.collection('todo_lists').updateOne({ account_id: req.session.user }, { $set: { todos: req.body.todos } }, (err, result) => {
             if (err) throw err;
             db.close();
@@ -254,7 +255,7 @@ app.use(function (err, req, res, next) {
  * HTTP Server
  */
 
-// Point static path to dist
+// Point static path to public directory
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Start the HTTP server.
